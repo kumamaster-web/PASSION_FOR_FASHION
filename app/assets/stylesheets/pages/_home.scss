@@ -1,1 +1,57 @@
-// Specific CSS for your home-page
+// Home page styles
+
+.hero {
+  background: linear-gradient(135deg, $blue 0%, #667eea 100%);
+  color: white;
+  padding: 100px 0;
+  min-height: 60vh;
+  display: flex;
+  align-items: center;
+}
+
+.heroicon {
+  font-size: 4rem;
+  margin-bottom: 20px;
+  opacity: 0.9;
+}
+
+.herotitle {
+  font-size: 3rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.herotagline {
+  font-size: 1.4rem;
+  opacity: 0.9;
+  margin-bottom: 20px;
+}
+
+.herodesc {
+  font-size: 1.1rem;
+  opacity: 0.85;
+  margin-bottom: 30px;
+}
+
+.herobuttons {
+  margin-top: 20px;
+}
+
+.features {
+  padding: 80px 0;
+  background: $light-gray;
+}
+
+.featurecard {
+  background: white;
+  padding: 40px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+  height: 100%;
+}
+
+.featureicon {
+  font-size: 3rem;
+  color: $blue;
+  margin-bottom: 20px;
+}

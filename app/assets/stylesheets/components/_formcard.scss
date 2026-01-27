@@ -1,0 +1,13 @@
+// Form card styles
+
+.formcard {
+  background: white;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.formcard h2 {
+  color: $gray;
+  font-weight: 700;
+}
