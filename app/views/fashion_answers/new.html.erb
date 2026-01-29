@@ -1,0 +1,44 @@
+<h1>Fashion Quiz</h1>
+
+<%= simple_form_for @fashion_answer, html: { multipart: true } do |f| %>
+
+  <div>
+    <h3>Upload Photo</h3>
+    <%= f.input :photo, as: :file, label: "Your photo" %>
+  </div>
+
+  <div>
+    <h3>Lifestyle</h3>
+    <%= f.input :lifestyle, collection: ["Professional", "Casual", "Active", "Creative", "Student"], label: false %>
+  </div>
+
+  <div>
+    <h3>Colors</h3>
+    <%= f.input :colors, collection: ["Neutrals", "Bold", "Pastels", "Earth tones", "Monochrome"], label: false %>
+  </div>
+
+  <div>
+    <h3>Occasion</h3>
+    <%= f.input :occasion, collection: ["Work", "Weekend", "Evening", "Travel", "Special events"], label: false %>
+  </div>
+
+  <div>
+    <h3>Comfort</h3>
+    <%= f.input :comfort, collection: ["Very important", "Somewhat important", "Style over comfort", "Balanced"], label: false %>
+  </div>
+
+  <div>
+    <h3>Statement</h3>
+    <%= f.input :statement, collection: ["Classic", "Trendy", "Edgy", "Romantic", "Minimalist"], label: false %>
+  </div>
+
+  <div>
+    <h3>Personality</h3>
+    <%= f.input :personality_type, collection: ["Introvert", "Extrovert", "Ambivert"], label: false %>
+  </div>
+
+  <div>
+    <%= f.submit "Get Advice", class: "btn btn-primary" %>
+  </div>
+
+<% end %>

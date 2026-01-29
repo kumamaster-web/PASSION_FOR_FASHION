@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_27_121426) do
+ActiveRecord::Schema[7.1].define(version: 2026_01_29_121449) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "fashion_answers", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "image_path"
+    t.string "lifestyle"
+    t.string "colors"
+    t.string "occasion"
+    t.string "comfort"
+    t.string "statement"
+    t.string "personality_type"
+    t.text "style"
+    t.text "colour_palette"
+    t.text "recommended_brands"
+    t.text "where_to_shop"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "persona"
+    t.index ["user_id"], name: "index_fashion_answers_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -22,8 +41,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_27_121426) do
     t.datetime "remember_created_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "username"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "fashion_answers", "users"
 end
