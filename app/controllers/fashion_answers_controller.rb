@@ -64,7 +64,7 @@ class FashionAnswersController < ApplicationController
     PROMPT
 
     begin
-      chat = RubyLLM.chat(model: "gemini-2.0-flash")
+      chat = RubyLLM.chat(model: "gemini-2.0-flash-lite")
       response = chat.ask(prompt)
 
       # Parse the response
