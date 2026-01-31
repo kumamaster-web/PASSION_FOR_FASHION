@@ -4,9 +4,12 @@
   <div class="card mb-3">
     <div class="card-header">Photo</div>
     <div class="card-body">
-      <% if @fashion_answer.image_path.present? %>
-        <%= image_tag @fashion_answer.image_path, style: "max-width: 300px;" %>
-      <% end %>
+      <p>Just for test</p>
+      <p>"data:image/png;base64, <%= @image.data %>"</p>
+      <%= @image.data %>
+      <img src="data:image/png;base64, <%= @image.data %>" alt="AI outfit" class="ai-outfit">
+
+
     </div>
   </div>
 
@@ -22,6 +25,8 @@
       <p><strong>Personality:</strong> <%= @fashion_answer.personality_type %></p>
     </div>
   </div>
+
+
 
   <h2>Fashion Profile Recommendations</h2>
 

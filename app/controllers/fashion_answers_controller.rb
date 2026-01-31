@@ -17,6 +17,14 @@ class FashionAnswersController < ApplicationController
     if @fashion_answer.save
       # Generate AI advice
       generate_advice(@fashion_answer)
+
+      # get a prompt to set up image generator
+      prompt = "a fashion guy in a shirt and pants"
+      response = RubyLLM.paint(prompt)
+
+      @fashion_answer.generated_image.attach(io: StringIO.new(Base64.decode64(response.data)), filename: "test.png", content_type: "image/png")
+      @fashion_answer.save
+
       redirect_to @fashion_answer
     else
       render :new
@@ -35,7 +43,8 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type)
+
+    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :images)
   end
 
   def fetch_product_recommendations(fashion_answer)
@@ -50,7 +59,7 @@ class FashionAnswersController < ApplicationController
   end
 
   def generate_advice(answer)
-    prompt = <<~PROMPT
+    @prompt = <<~PROMPT
       Based on the following fashion preferences, provide personalized style advice:
 
       Gender: #{answer.gender}
