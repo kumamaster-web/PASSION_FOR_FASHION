@@ -11,7 +11,7 @@
         </p>
         <div class="herobuttons">
           <% if user_signed_in? %>
-            <%= link_to "Get Started", root_path, class: "btn btn-primary btn-lg me-2" %>
+            <%= link_to "Get Started", new_fashion_answer_path, class: "btn btn-primary btn-lg me-2" %>
           <% else %>
             <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-primary btn-lg me-2" %>
             <%= link_to "Log In", new_user_session_path, class: "btn btn-outline-light btn-lg" %>

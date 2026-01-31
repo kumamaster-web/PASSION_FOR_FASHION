@@ -1,0 +1,75 @@
+<div class="text-center">
+  <h1>Fashion Profile Results</h1>
+
+  <div class="card mb-3">
+    <div class="card-header">Photo</div>
+    <div class="card-body">
+      <% if @fashion_answer.image_path.present? %>
+        <%= image_tag @fashion_answer.image_path, style: "max-width: 300px;" %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="card mb-3">
+    <div class="card-header">What you said..</div>
+    <div class="card-body">
+      <p><strong>Lifestyle:</strong> <%= @fashion_answer.lifestyle %></p>
+      <p><strong>Colors:</strong> <%= @fashion_answer.colors %></p>
+      <p><strong>Occasion:</strong> <%= @fashion_answer.occasion %></p>
+      <p><strong>Comfort:</strong> <%= @fashion_answer.comfort %></p>
+      <p><strong>Statement:</strong> <%= @fashion_answer.statement %></p>
+      <p><strong>Personality:</strong> <%= @fashion_answer.personality_type %></p>
+    </div>
+  </div>
+
+  <h2>Fashion Profile Recommendations</h2>
+
+  <% if @fashion_answer.style.present? %>
+    <% if @fashion_answer.persona.present? %>
+      <div class="card mb-3">
+        <div class="card-body">
+          <h3><%= @fashion_answer.persona %></h3>
+        </div>
+      </div>
+    <% end %>
+
+    <div class="card mb-3">
+      <div class="card-header">Style</div>
+      <div class="card-body">
+        <p><%= @fashion_answer.style %></p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Colour Palette</div>
+      <div class="card-body">
+        <p><%= @fashion_answer.colour_palette %></p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Recommended Brands</div>
+      <div class="card-body">
+        <p><%= @fashion_answer.recommended_brands %></p>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-header">Where to Shop</div>
+      <div class="card-body">
+        <p><%= @fashion_answer.where_to_shop %></p>
+      </div>
+    </div>
+  <% else %>
+    <div class="card mb-3">
+      <div class="card-body">
+        <p>AI recommendations unavailable. Try again later or <%= link_to "retake the quiz", new_fashion_answer_path %>.</p>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="mt-3">
+    <%= link_to "Take Another Quiz", new_fashion_answer_path, class: "btn btn-primary" %>
+    <%= link_to "View History", fashion_answers_path, class: "btn btn-secondary" %>
+  </div>
+</div>

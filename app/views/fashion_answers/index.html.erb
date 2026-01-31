@@ -1,0 +1,30 @@
+<h1>Your History</h1>
+
+<%= link_to "Take New Quiz", new_fashion_answer_path, class: "btn btn-primary" %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Lifestyle</th>
+      <th>Colors</th>
+      <th>Occasion</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @fashion_answers.each do |answer| %>
+      <tr>
+        <td><%= answer.created_at.strftime("%b %d, %Y") %></td>
+        <td><%= answer.lifestyle %></td>
+        <td><%= answer.colors %></td>
+        <td><%= answer.occasion %></td>
+        <td><%= link_to "View", answer %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<% if @fashion_answers.empty? %>
+  <p>No results yet. Take your first quiz!</p>
+<% end %>
