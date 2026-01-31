@@ -1,9 +1,16 @@
+require 'httparty'
+
 class SerpapiClient
   include HTTParty
   base_uri 'https://serpapi.com'
 
   def initialize
     @api_key = ENV['SERPAPI_KEY']
+  end
+
+  # Class method for easy access
+  def self.products_for_fashion_answer(fashion_answer)
+    new.products_for_fashion_answer(fashion_answer)
   end
 
   # Search Google Shopping for products
@@ -69,10 +76,10 @@ class SerpapiClient
 
     items.map do |item|
       {
-        name: item['title'],
+        title: item['title'],
         price: item['extracted_price'] ? "$#{item['extracted_price']}" : item['price'],
-        image_url: item['thumbnail'],
-        product_url: item['link'],
+        thumbnail: item['thumbnail'],
+        link: item['link'],
         source: item['source'],
         rating: item['rating'],
         reviews: item['reviews'],
