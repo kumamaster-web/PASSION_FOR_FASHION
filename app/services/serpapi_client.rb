@@ -79,7 +79,7 @@ class SerpapiClient
         title: item['title'],
         price: item['extracted_price'] ? "$#{item['extracted_price']}" : item['price'],
         thumbnail: item['thumbnail'],
-        link: item['link'],
+        link: item['product_link'],
         source: item['source'],
         rating: item['rating'],
         reviews: item['reviews'],
