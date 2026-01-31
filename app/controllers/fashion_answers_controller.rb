@@ -25,6 +25,7 @@ class FashionAnswersController < ApplicationController
 
   def show
     @fashion_answer = current_user.fashion_answers.find(params[:id])
+    @product_recommendations = fetch_product_recommendations(@fashion_answer)
   end
 
   def index
@@ -34,13 +35,25 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type)
+    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type)
+  end
+
+  def fetch_product_recommendations(fashion_answer)
+    return [] unless ENV['SERPAPI_KEY'].present?
+
+    Rails.cache.fetch("serpapi_products_#{fashion_answer.id}", expires_in: 1.hour) do
+      SerpapiClient.new.products_for_fashion_answer(fashion_answer)
+    end
+  rescue => e
+    Rails.logger.error "Failed to fetch product recommendations: #{e.message}"
+    []
   end
 
   def generate_advice(answer)
     prompt = <<~PROMPT
       Based on the following fashion preferences, provide personalized style advice:
 
+      Gender: #{answer.gender}
       Lifestyle: #{answer.lifestyle}
       Favorite Colors: #{answer.colors}
       Main Occasion: #{answer.occasion}

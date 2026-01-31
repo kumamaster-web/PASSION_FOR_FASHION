@@ -52,6 +52,7 @@ gem "sassc-rails"
 gem "devise"
 gem "cloudinary"
 gem "ruby_llm"
+gem "httparty"
 
 group :development, :test do
   gem "dotenv-rails"
