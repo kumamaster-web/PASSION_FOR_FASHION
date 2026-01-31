@@ -3,6 +3,11 @@
 <%= simple_form_for @fashion_answer, html: { multipart: true } do |f| %>
 
   <div>
+    <h3>Gender</h3>
+    <%= f.input :gender, collection: ["Female", "Male", "Non-binary", "Prefer not to say"], label: false, include_blank: "Select gender (optional)" %>
+  </div>
+
+  <div>
     <h3>Upload Photo</h3>
     <%= f.input :photo, as: :file, label: "Your photo" %>
   </div>
