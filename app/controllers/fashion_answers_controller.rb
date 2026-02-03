@@ -35,7 +35,7 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender)
+    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency)
   end
 
   def fetch_product_recommendations(answer)
@@ -53,10 +53,15 @@ class FashionAnswersController < ApplicationController
 
   def generate_advice(answer)
     gender_context = answer.gender.present? ? "Gender: #{answer.gender}\n      " : ""
+    price_context = if answer.price_min.present? && answer.price_max.present?
+                      "Budget: #{answer.price_min}-#{answer.price_max} #{answer.currency} per item\n      "
+                    else
+                      ""
+                    end
     prompt = <<~PROMPT
       Based on the following fashion preferences, provide personalized style advice:
 
-      #{gender_context}Lifestyle: #{answer.lifestyle}
+      #{gender_context}#{price_context}Lifestyle: #{answer.lifestyle}
       Favorite Colors: #{answer.colors}
       Main Occasion: #{answer.occasion}
       Comfort Preference: #{answer.comfort}
