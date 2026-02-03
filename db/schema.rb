@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_01_29_121449) do
+ActiveRecord::Schema[7.1].define(version: 2026_02_03_110348) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -30,6 +30,10 @@ ActiveRecord::Schema[7.1].define(version: 2026_01_29_121449) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "persona"
+    t.string "gender"
+    t.integer "price_min"
+    t.integer "price_max"
+    t.string "currency"
     t.index ["user_id"], name: "index_fashion_answers_on_user_id"
   end
 
