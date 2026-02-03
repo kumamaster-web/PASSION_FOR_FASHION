@@ -2,20 +2,23 @@
   <h1>Fashion Profile Results</h1>
 
   <div class="card mb-3">
-    <div class="card-header">Photo</div>
+    <div class="card-header">AI thinks ...</div>
     <div class="card-body">
-      <p>Just for test</p>
-      <p>"data:image/png;base64, <%= @image.data %>"</p>
-      <%= @image.data %>
-      <img src="data:image/png;base64, <%= @image.data %>" alt="AI outfit" class="ai-outfit">
-
 
     </div>
   </div>
 
   <div class="card mb-3">
     <div class="card-header">What you said..</div>
-    <div class="card-body">
+
+    <div class="card-body justify-content-center">
+      <div >
+        <% if @fashion_answer.image_path.present? %>
+        <%= image_tag @fashion_answer.image_path, alt: "Uploaded photo", class: "uploaded-photo user-image" %>
+        <% else %>
+        <p>No photo uploaded</p>
+        <% end %>
+      </div>
       <p><strong>Gender:</strong> <%= @fashion_answer.gender %></p>
       <p><strong>Lifestyle:</strong> <%= @fashion_answer.lifestyle %></p>
       <p><strong>Colors:</strong> <%= @fashion_answer.colors %></p>

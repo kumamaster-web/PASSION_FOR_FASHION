@@ -8,27 +8,19 @@ class FashionAnswersController < ApplicationController
   def create
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
-    # Upload image to Cloudinary
-    if params[:fashion_answer][:photo].present?
-      result = Cloudinary::Uploader.upload(params[:fashion_answer][:photo])
+    if params[:fashion_answer][:user_image].present?
+      upload = params[:fashion_answer][:user_image]
+      result = Cloudinary::Uploader.upload(upload.tempfile.path)
       @fashion_answer.image_path = result["secure_url"]
     end
 
     if @fashion_answer.save
-      # Generate AI advice
-      generate_advice(@fashion_answer)
-
-      # get a prompt to set up image generator
-      prompt = "a fashion guy in a shirt and pants"
-      response = RubyLLM.paint(prompt)
-
-      @fashion_answer.generated_image.attach(io: StringIO.new(Base64.decode64(response.data)), filename: "test.png", content_type: "image/png")
-      @fashion_answer.save
-
-      redirect_to @fashion_answer
+      # generate_advice(@fashion_answer)
+      redirect_to @fashion_answer, notice: "Your fashion answer was created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
+
   end
 
   def show
@@ -44,7 +36,7 @@ class FashionAnswersController < ApplicationController
 
   def fashion_answer_params
 
-    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :images)
+    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :user_image)
   end
 
   def fetch_product_recommendations(fashion_answer)
