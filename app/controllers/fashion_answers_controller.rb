@@ -8,19 +8,13 @@ class FashionAnswersController < ApplicationController
   def create
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
-    # Upload image to Cloudinary
-    if params[:fashion_answer][:photo].present?
-      result = Cloudinary::Uploader.upload(params[:fashion_answer][:photo])
-      @fashion_answer.image_path = result["secure_url"]
+    if @fashion_answer.save
+      # generate_advice(@fashion_answer)
+      redirect_to @fashion_answer, notice: "Your fashion answer was created."
+    else
+      render :new, status: :unprocessable_entity
     end
 
-    if @fashion_answer.save
-      # Generate AI advice
-      generate_advice(@fashion_answer)
-      redirect_to @fashion_answer
-    else
-      render :new
-    end
   end
 
   def show
@@ -35,7 +29,7 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency)
+    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency, :user_image)
   end
 
   def fetch_product_recommendations(answer)
