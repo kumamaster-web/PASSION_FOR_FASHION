@@ -1,0 +1,15 @@
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h4 mb-0"><%= @chat.title %></h1>
+    <%= link_to "Back to Results", fashion_answer_path(@chat.fashion_answer), class: "btn btn-outline-secondary btn-sm" %>
+  </div>
+
+  <div id="messages" class="border rounded p-3 mb-3" style="height: 60vh; overflow-y: auto;">
+    <%= render @chat.messages.order(:created_at) %>
+  </div>
+
+  <%= form_with model: [@chat, Message.new], data: { turbo: true }, class: "d-flex gap-2" do |f| %>
+    <%= f.text_field :content, class: "form-control", placeholder: "Ask your stylist..." %>
+    <%= f.submit "Send", class: "btn btn-primary" %>
+  <% end %>
+</div>

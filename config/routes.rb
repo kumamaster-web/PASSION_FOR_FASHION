@@ -2,8 +2,13 @@ Rails.application.routes.draw do
   devise_for :users
   root to: "pages#home"
 
-  resources :fashion_answers, only: [:new, :create, :show, :index]
+  resources :fashion_answers, only: [:new, :create, :show, :index] do
+    resource :chat, only: [:create]   # singular = 1 chat per quiz result
+  end
 
+  resources :chats, only: [:show] do
+    resources :messages, only: [:create]
+  end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

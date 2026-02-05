@@ -19,7 +19,7 @@ class FashionAnswersController < ApplicationController
 
   def show
     @fashion_answer = current_user.fashion_answers.find(params[:id])
-    @product_recommendations = fetch_product_recommendations(@fashion_answer)
+    @products = fetch_product_recommendations(@fashion_answer)
   end
 
   def index
@@ -29,27 +29,33 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-
-    params.require(:fashion_answer).permit(:gender, :lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :user_image)
+    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency)
   end
 
-  def fetch_product_recommendations(fashion_answer)
-    return [] unless ENV['SERPAPI_KEY'].present?
+  def fetch_product_recommendations(answer)
+    return [] unless answer.recommended_brands.present?
 
-    Rails.cache.fetch("serpapi_products_#{fashion_answer.id}", expires_in: 1.hour) do
-      SerpapiClient.new.products_for_fashion_answer(fashion_answer)
+    # Use Rails cache to avoid repeated API calls
+    cache_key = "products_#{answer.id}_#{answer.updated_at.to_i}"
+    Rails.cache.fetch(cache_key, expires_in: 1.hour) do
+      SerpapiClient.products_for_fashion_answer(answer)
     end
   rescue => e
-    Rails.logger.error "Failed to fetch product recommendations: #{e.message}"
+    Rails.logger.error "SerpAPI Error: #{e.message}"
     []
   end
 
   def generate_advice(answer)
-    @prompt = <<~PROMPT
+    gender_context = answer.gender.present? ? "Gender: #{answer.gender}\n      " : ""
+    price_context = if answer.price_min.present? && answer.price_max.present?
+                      "Budget: #{answer.price_min}-#{answer.price_max} #{answer.currency} per item\n      "
+                    else
+                      ""
+                    end
+    prompt = <<~PROMPT
       Based on the following fashion preferences, provide personalized style advice:
 
-      Gender: #{answer.gender}
-      Lifestyle: #{answer.lifestyle}
+      #{gender_context}#{price_context}Lifestyle: #{answer.lifestyle}
       Favorite Colors: #{answer.colors}
       Main Occasion: #{answer.occasion}
       Comfort Preference: #{answer.comfort}

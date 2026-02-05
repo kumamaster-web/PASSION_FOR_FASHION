@@ -1,51 +1,13 @@
 <div class="hero">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-8 col-lg-6 text-center">
-        <i class="fas fa-magic heroicon"></i>
-        <h1 class="herotitle">Passion for Fashion</h1>
-        <p class="herotagline">AI-Powered Fashion Personality Interface</p>
-        <p class="herodesc">
-          Discover your unique style and get personalized recommendations
-          tailored just for you.
-        </p>
-        <div class="herobuttons">
-          <% if user_signed_in? %>
-            <%= link_to "Get Started", new_fashion_answer_path, class: "btn btn-primary btn-lg me-2" %>
-          <% else %>
-            <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-primary btn-lg me-2" %>
-            <%= link_to "Log In", new_user_session_path, class: "btn btn-outline-light btn-lg" %>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+  <%= image_tag 'flame-hanger.svg', class: 'logo', alt: 'Passion for Fashion logo' %>
 
-<div class="features">
-  <div class="container">
-    <div class="row text-center">
-      <div class="col-12 col-md-4 mb-4">
-        <div class="featurecard">
-          <i class="fas fa-user-circle featureicon"></i>
-          <h3>Style Profile</h3>
-          <p>Create your unique fashion personality profile with our AI assistant.</p>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 mb-4">
-        <div class="featurecard">
-          <i class="fas fa-robot featureicon"></i>
-          <h3>Smart Recommendations</h3>
-          <p>Get AI-powered outfit suggestions based on your preferences.</p>
-        </div>
-      </div>
-      <div class="col-12 col-md-4 mb-4">
-        <div class="featurecard">
-          <i class="fas fa-heart featureicon"></i>
-          <h3>Discover Trends</h3>
-          <p>Stay ahead with personalized trend alerts matching your style.</p>
-        </div>
-      </div>
-    </div>
+  <h1>Passion for Fashion</h1>
+  <p class="tagline">
+    AI-powered fashion advice, tailored for you
+  </p>
+
+  <div class="hero-actions">
+    <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-primary" %>
+    <%= link_to "Log In", new_user_session_path, class: "btn btn-outline" %>
   </div>
 </div>
