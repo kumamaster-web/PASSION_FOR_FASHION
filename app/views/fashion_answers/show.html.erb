@@ -77,6 +77,21 @@
       </div>
     </div>
 
+    <!-- ✅ AI Chat CTA (1 chat per quiz result) -->
+    <div class="card mb-3">
+      <div class="card-body">
+        <h4 class="mb-2">💬 Ask your AI Stylist</h4>
+        <p class="text-muted mb-3">
+          Chat with an AI stylist using <strong>this exact quiz result</strong> (colors, lifestyle, budget, brands).
+        </p>
+
+        <%= button_to "Start / Continue Chat",
+            fashion_answer_chat_path(@fashion_answer),
+            method: :post,
+            class: "btn btn-dark" %>
+      </div>
+    </div>
+
     <!-- Shop Your Style Section -->
     <% if @products.present? %>
       <div class="card mb-3">
