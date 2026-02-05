@@ -8,12 +8,6 @@ class FashionAnswersController < ApplicationController
   def create
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
-    if params[:fashion_answer][:user_image].present?
-      upload = params[:fashion_answer][:user_image]
-      result = Cloudinary::Uploader.upload(upload.tempfile.path)
-      @fashion_answer.image_path = result["secure_url"]
-    end
-
     if @fashion_answer.save
       # generate_advice(@fashion_answer)
       redirect_to @fashion_answer, notice: "Your fashion answer was created."
