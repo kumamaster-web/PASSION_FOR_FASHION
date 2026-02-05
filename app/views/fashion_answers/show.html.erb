@@ -19,6 +19,13 @@
       <p><strong>Comfort:</strong> <%= @fashion_answer.comfort %></p>
       <p><strong>Statement:</strong> <%= @fashion_answer.statement %></p>
       <p><strong>Personality:</strong> <%= @fashion_answer.personality_type %></p>
+      <% if @fashion_answer.price_min.present? && @fashion_answer.price_max.present? %>
+        <p><strong>Price Preference:</strong>
+          <%= @fashion_answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(@fashion_answer.price_min) %> -
+          <%= @fashion_answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(@fashion_answer.price_max) %>
+          (<%= @fashion_answer.currency %>)
+        </p>
+      <% end %>
     </div>
   </div>
 

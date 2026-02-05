@@ -9,6 +9,7 @@
       <th>Lifestyle</th>
       <th>Colors</th>
       <th>Occasion</th>
+      <th>Price Preference</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -19,6 +20,13 @@
         <td><%= answer.lifestyle %></td>
         <td><%= answer.colors %></td>
         <td><%= answer.occasion %></td>
+        <td>
+          <% if answer.price_min.present? && answer.price_max.present? %>
+            <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_min) %> - <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_max) %>
+          <% else %>
+            -
+          <% end %>
+        </td>
         <td><%= link_to "View", answer %></td>
       </tr>
     <% end %>
