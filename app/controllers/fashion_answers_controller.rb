@@ -29,7 +29,7 @@ class FashionAnswersController < ApplicationController
   private
 
   def fashion_answer_params
-    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency)
+    params.require(:fashion_answer).permit(:lifestyle, :colors, :occasion, :comfort, :statement, :personality_type, :gender, :price_min, :price_max, :currency, :user_image)
   end
 
   def fetch_product_recommendations(answer)
