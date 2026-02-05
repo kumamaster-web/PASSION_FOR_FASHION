@@ -38,6 +38,83 @@
       </div>
     </div>
 
+    <div class="quiz-section">
+      <h3>Lifestyle</h3>
+
+      <div class="option-buttons">
+        <% ["Professional", "Casual", "Active", "Creative", "Student"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :lifestyle, option, class: "option-input" %>
+            <span><%= option %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>Colors</h3>
+
+      <div class="option-buttons">
+        <% ["Neutrals", "Bold", "Pastels", "Earth tones", "Monochrome"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :colors, option, class: "option-input" %>
+            <span><%= option %></span>
+            </label>
+          <% end %>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>Occasion</h3>
+
+        <div class="option-buttons">
+        <% ["Work", "Weekend", "Evening", "Travel", "Special events"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :occasion, option, class: "option-input" %>
+            <span><%= option %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>Comfort</h3>
+
+        <div class="option-buttons">
+        <% ["Very important", "Somewhat important", "Style over comfort", "Balanced"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :comfort, option, class: "option-input" %>
+            <span><%= option %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>Statement</h3>
+
+        <div class="option-buttons">
+        <% ["Classic", "Trendy", "Edgy", "Romantic", "Minimalist"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :statement, option, class: "option-input" %>
+            <span><%= option %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="quiz-section">
+      <h3>Personality</h3>
+
+        <div class="option-buttons">
+        <% ["Introvert", "Extrovert", "Ambivert"].each do |option| %>
+          <label class="option-btn">
+            <%= f.radio_button :personality_type, option, class: "option-input" %>
+            <span><%= option %></span>
+          </label>
+        <% end %>
+      </div>
+    </div>
 
   <div>
     <h3>On average, what price window per item are you comfortable spending?</h3>
@@ -220,86 +297,7 @@
     });
   </script>
 
-  <div>
-    <%= f.submit "Get Advice", class: "btn btn-primary" %>
-  </div>
-
-      <div class="option-buttons">
-        <% ["Professional", "Casual", "Active", "Creative", "Student"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :lifestyle, option, class: "option-input" %>
-            <span><%= option %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="quiz-section">
-      <h3>Colors</h3>
-
-      <div class="option-buttons">
-        <% ["Neutrals", "Bold", "Pastels", "Earth tones", "Monochrome"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :colors, option, class: "option-input" %>
-            <span><%= option %></span>
-            </label>
-          <% end %>
-        </div>
-    </div>
-
-    <div class="quiz-section">
-      <h3>Occasion</h3>
-
-        <div class="option-buttons">
-        <% ["Work", "Weekend", "Evening", "Travel", "Special events"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :occasion, option, class: "option-input" %>
-            <span><%= option %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="quiz-section">
-      <h3>Comfort</h3>
-
-        <div class="option-buttons">
-        <% ["Very important", "Somewhat important", "Style over comfort", "Balanced"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :comfort, option, class: "option-input" %>
-            <span><%= option %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="quiz-section">
-      <h3>Statement</h3>
-
-        <div class="option-buttons">
-        <% ["Classic", "Trendy", "Edgy", "Romantic", "Minimalist"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :statement, option, class: "option-input" %>
-            <span><%= option %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="quiz-section">
-      <h3>Personality</h3>
-
-        <div class="option-buttons">
-        <% ["Introvert", "Extrovert", "Ambivert"].each do |option| %>
-          <label class="option-btn">
-            <%= f.radio_button :personality_type, option, class: "option-input" %>
-            <span><%= option %></span>
-          </label>
-        <% end %>
-      </div>
-    </div>
-
-    <div class="quiz-section">
+    <div class="quiz-section submit-section">
       <%= f.submit "Get Advice", class: "btn btn-primary" %>
     </div>
 
