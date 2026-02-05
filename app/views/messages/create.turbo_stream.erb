@@ -1,0 +1,5 @@
+<% last_two = @chat.messages.order(:created_at).last(2) %>
+
+<% last_two.each do |msg| %>
+  <%= turbo_stream.append "messages", partial: "messages/message", locals: { message: msg } %>
+<% end %>

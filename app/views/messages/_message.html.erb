@@ -1,0 +1,8 @@
+<% is_user = message.role == "user" %>
+
+<div class="mb-2 d-flex <%= is_user ? "justify-content-end" : "justify-content-start" %>">
+  <div class="p-2 rounded <%= is_user ? "bg-primary text-white" : "bg-light" %>" style="max-width: 75%;">
+    <div class="small fw-bold mb-1"><%= is_user ? "You" : "AI Stylist" %></div>
+    <div><%= simple_format(message.content) %></div>
+  </div>
+</div>
