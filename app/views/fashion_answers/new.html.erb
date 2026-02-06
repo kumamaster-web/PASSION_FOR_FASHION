@@ -123,10 +123,10 @@
       <label class="form-label d-block">Currency:</label>
       <div class="btn-group" role="group" aria-label="Currency selection">
         <input type="radio" class="btn-check" name="fashion_answer[currency]" id="currency_jpy" value="JPY" checked>
-        <label class="btn btn-outline-primary" for="currency_jpy">JPY (¥)</label>
+        <label class="btn slider_selector" for="currency_jpy">JPY (¥)</label>
 
         <input type="radio" class="btn-check" name="fashion_answer[currency]" id="currency_usd" value="USD">
-        <label class="btn btn-outline-primary" for="currency_usd">USD ($)</label>
+        <label class="btn slider_selector" for="currency_usd">USD ($)</label>
       </div>
     </div>
 
@@ -138,7 +138,7 @@
     <!-- Dual Range Slider -->
     <div class="dual-range-container" style="position: relative; height: 40px; margin: 20px auto; width: 70%; max-width: 400px;">
       <div class="slider-track" style="position: absolute; width: 100%; height: 6px; background: #ddd; border-radius: 3px; top: 50%; transform: translateY(-50%);"></div>
-      <div id="slider-range" style="position: absolute; height: 6px; background: #0d6efd; border-radius: 3px; top: 50%; transform: translateY(-50%);"></div>
+      <div id="slider-range" style="position: absolute; height: 6px; background: linear-gradient(135deg, #ff6a3d, #ff9a3d); border-radius: 3px; top: 50%; transform: translateY(-50%);"></div>
 
       <input type="range" id="price_min" name="fashion_answer[price_min]"
              min="1000" max="500000" step="1000" value="1000"
@@ -173,7 +173,7 @@
       appearance: none;
       width: 20px;
       height: 20px;
-      background: #0d6efd;
+      background: linear-gradient(135deg, #ff6a3d, #ff9a3d);
       border: 3px solid #fff;
       border-radius: 50%;
       cursor: pointer;
@@ -184,7 +184,7 @@
     .dual-range-container input[type="range"]::-moz-range-thumb {
       width: 20px;
       height: 20px;
-      background: #0d6efd;
+      background: linear-gradient(135deg, #ff6a3d, #ff9a3d);
       border: 3px solid #fff;
       border-radius: 50%;
       cursor: pointer;
