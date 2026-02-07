@@ -8,36 +8,38 @@ class ChatbotService
   end
 
   def reply!(last_user_message:)
-    max_retries = 3
+    max_retries = 5
     retry_count = 0
-    base_delay = 2 # seconds
+    base_delay = 3 # seconds
 
     begin
+      Rails.logger.info "ChatbotService request start chat_id=#{@chat.id} attempt=#{retry_count + 1}"
       llm = RubyLLM.chat(model: "gemini-2.0-flash")
 
-    # System context (quiz-specific)
-    llm.add_message(role: :user, content: system_context)
+      # System context (quiz-specific)
+      llm.add_message(role: :user, content: system_context)
 
-    # Conversation history from DB
-    @chat.messages.order(:created_at).each do |m|
-      role = (m.role == "assistant") ? :assistant : :user
-      llm.add_message(role: role, content: m.content)
-    end
+      # Conversation history from DB
+      @chat.messages.order(:created_at).each do |m|
+        role = (m.role == "assistant") ? :assistant : :user
+        llm.add_message(role: role, content: m.content)
+      end
 
-    # Ask (use the latest user message)
+      # Ask (use the latest user message)
       response = llm.ask(last_user_message)
+      Rails.logger.info "ChatbotService request success chat_id=#{@chat.id}"
       response.content
     rescue => e
-      if (e.message.include?("429") || e.message.downcase.include?("rate") || e.message.downcase.include?("exhausted")) && retry_count < max_retries
-        retry_count += 1
-        delay = base_delay * (2 ** (retry_count - 1))
-        Rails.logger.warn "ChatbotService rate limited, retrying in #{delay}s (attempt #{retry_count}/#{max_retries})"
+      retry_count += 1
+      if retry_count <= max_retries
+        delay = base_delay * (2 ** (retry_count - 1)) + rand(0..2)
+        Rails.logger.warn "ChatbotService error (#{e.class}: #{e.message}), retrying in #{delay}s (attempt #{retry_count}/#{max_retries}) chat_id=#{@chat.id}"
         sleep(delay)
         retry
       end
 
-      Rails.logger.error "ChatbotService AI Error: #{e.message}"
-      "Sorry — I couldn’t reach the AI right now. Please try again."
+      Rails.logger.error "ChatbotService giving up: #{e.class}: #{e.message} chat_id=#{@chat.id} after #{retry_count} attempts"
+      "Sorry - I couldn't reach the AI right now. Please try again."
     end
   end
 

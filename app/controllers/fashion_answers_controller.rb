@@ -80,12 +80,12 @@ class FashionAnswersController < ApplicationController
       SHOPS: [comma separated shops]
     PROMPT
 
-    max_retries = 3
+    max_retries = 5
     retry_count = 0
-    base_delay = 2 # seconds
+    base_delay = 3 # seconds
 
     begin
-      Rails.logger.info "AI request start fashion_answer_id=#{answer.id} model=gemini-2.0-flash"
+      Rails.logger.info "AI request start fashion_answer_id=#{answer.id} model=gemini-2.0-flash attempt=#{retry_count + 1}"
       chat = RubyLLM.chat(model: "gemini-2.0-flash")
       response = chat.ask(prompt)
 
@@ -100,16 +100,14 @@ class FashionAnswersController < ApplicationController
       Rails.logger.info "AI request success fashion_answer_id=#{answer.id}"
       true
     rescue => e
-      rate_limited = e.message.include?("429") || e.message.downcase.include?("rate") || e.message.downcase.include?("exhausted")
-
-      if rate_limited && retry_count < max_retries
-        retry_count += 1
-        delay = base_delay * (2 ** (retry_count - 1)) # Exponential backoff: 2s, 4s, 8s
-        Rails.logger.warn "AI rate limited, retrying in #{delay}s (attempt #{retry_count}/#{max_retries})"
+      retry_count += 1
+      if retry_count <= max_retries
+        delay = base_delay * (2 ** (retry_count - 1)) + rand(0..2) # 3s, 6s, 12s, 24s, 48s + jitter
+        Rails.logger.warn "AI error (#{e.class}: #{e.message}), retrying in #{delay}s (attempt #{retry_count}/#{max_retries}) fashion_answer_id=#{answer.id}"
         sleep(delay)
         retry
       else
-        Rails.logger.error "AI Error: #{e.class}: #{e.message} fashion_answer_id=#{answer.id} retries=#{retry_count} rate_limited=#{rate_limited}"
+        Rails.logger.error "AI giving up: #{e.class}: #{e.message} fashion_answer_id=#{answer.id} after #{retry_count} attempts"
         false
       end
     end
