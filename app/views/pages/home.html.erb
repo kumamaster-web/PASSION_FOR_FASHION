@@ -6,8 +6,24 @@
     AI-powered fashion advice, tailored for you
   </p>
 
-  <div class="hero-actions">
-    <%= link_to "Sign Up Free", new_user_registration_path, class: "btn btn-primary" %>
-    <%= link_to "Log In", new_user_session_path, class: "btn btn-outline" %>
-  </div>
+<div class="hero-actions">
+  <% if user_signed_in? %>
+    <%= link_to "Start Your Quiz",
+        new_fashion_answer_path,
+        class: "btn btn-primary" %>
+
+    <%= link_to "View Your History",
+        fashion_answers_path,
+        class: "btn btn-outline" %>
+  <% else %>
+    <%= link_to "Sign Up Free",
+        new_user_registration_path,
+        class: "btn btn-primary" %>
+
+    <%= link_to "Log In",
+        new_user_session_path,
+        class: "btn btn-outline" %>
+  <% end %>
+</div>
+
 </div>
