@@ -1,38 +1,42 @@
-<h1>Your History</h1>
+<div class="fashion-answers">
+  <h1>Your History</h1>
 
-<%= link_to "Take New Quiz", new_fashion_answer_path, class: "btn btn-primary" %>
+  <div class="history-actions">
+    <%= link_to "Take New Quiz", new_fashion_answer_path, class: "btn btn-primary" %>
+  </div>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Date</th>
-      <th>Lifestyle</th>
-      <th>Colors</th>
-      <th>Occasion</th>
-      <th>Price Preference</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @fashion_answers.each do |answer| %>
+  <table class="history-table">
+    <thead>
       <tr>
-        <td><%= answer.created_at.strftime("%b %d, %Y") %></td>
-        <td><%= answer.lifestyle %></td>
-        <td><%= answer.colors %></td>
-        <td><%= answer.occasion %></td>
-        <td>
-          <% if answer.price_min.present? && answer.price_max.present? %>
-            <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_min) %> - <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_max) %>
-          <% else %>
-            -
-          <% end %>
-        </td>
-        <td><%= link_to "View", answer %></td>
+        <th>Date</th>
+        <th>Lifestyle</th>
+        <th>Colors</th>
+        <th>Occasion</th>
+        <th>Price Preference</th>
+        <th>Actions</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @fashion_answers.each do |answer| %>
+        <tr>
+          <td><%= answer.created_at.strftime("%b %d, %Y") %></td>
+          <td><%= answer.lifestyle %></td>
+          <td><%= answer.colors %></td>
+          <td><%= answer.occasion %></td>
+          <td>
+            <% if answer.price_min.present? && answer.price_max.present? %>
+              <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_min) %> - <%= answer.currency == 'JPY' ? '¥' : '$' %><%= number_with_delimiter(answer.price_max) %>
+            <% else %>
+              -
+            <% end %>
+          </td>
+          <td><%= link_to "View", answer, class: "view-link" %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 
-<% if @fashion_answers.empty? %>
-  <p>No results yet. Take your first quiz!</p>
-<% end %>
+  <% if @fashion_answers.empty? %>
+    <p>No results yet. Take your first quiz!</p>
+  <% end %>
+</div>
