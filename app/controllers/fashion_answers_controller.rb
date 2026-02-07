@@ -93,7 +93,7 @@ class FashionAnswersController < ApplicationController
         Comfort Preference: #{answer.comfort}
         Style Statement: #{answer.statement}
         Personality Type: #{answer.personality_type}
-        User Image: #{Base64.strict_encode64(@fashion_answer.user_image.download)}
+
     PROMPT
   end
 
