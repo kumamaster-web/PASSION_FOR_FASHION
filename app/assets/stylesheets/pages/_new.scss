@@ -145,11 +145,24 @@
   background: #fafafa;
   transition: all 0.2s ease;
   margin: 0 auto;
+  max-width: 600px;
+  overflow: hidden;
 }
 
 .upload-box:hover {
   background: #f5f3ff;
   border-color: #ff7a18;
+}
+
+.upload-preview {
+  max-width: 100%;
+  max-height: 400px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+  display: block;
+  margin: 0 auto;
 }
 
 .upload-content svg {
