@@ -38,7 +38,7 @@ class FashionAnswersController < ApplicationController
     # Use Rails cache to avoid repeated API calls
     cache_key = "products_#{answer.id}_#{answer.updated_at.to_i}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      SerpapiClient.products_for_fashion_answer(answer)
+
     end
   rescue => e
     Rails.logger.error "SerpAPI Error: #{e.message}"
@@ -82,7 +82,7 @@ class FashionAnswersController < ApplicationController
     base_delay = 2 # seconds
 
     begin
-      chat = RubyLLM.chat(model: "gemini-2.0-flash-lite")
+      chat = RubyLLM.chat(model: "gemini-2.0-flash")
       response = chat.ask(prompt)
 
       # Parse the response
