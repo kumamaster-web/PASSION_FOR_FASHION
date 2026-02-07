@@ -1,3 +1,5 @@
+require 'base64'
+
 class FashionAnswersController < ApplicationController
   before_action :authenticate_user!
 
@@ -8,19 +10,49 @@ class FashionAnswersController < ApplicationController
   def create
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
+    # Upload image to Cloudinary
+    if params[:fashion_answer][:user_image].present?
+      @fashion_answer.user_image.attach(params[:fashion_answer][:user_image])
+      result = Cloudinary::Uploader.upload(params[:fashion_answer][:user_image])
+      @fashion_answer.image_path = result["secure_url"]
+    end
+
+
+
     if @fashion_answer.save
-      advice_ok = generate_advice(@fashion_answer)
-      if advice_ok
-        redirect_to @fashion_answer, notice: "Your fashion answer was created.", status: :see_other
-      else
-        flash[:alert] = "AI recommendations are temporarily unavailable. Please try again in a few minutes."
-        redirect_to @fashion_answer, status: :see_other
-      end
+      # Generate AI advice
+      @ruby_llm_chat = RubyLLM.chat(model: "gpt-4o")
+
+      @generated_image = RubyLLM.paint(image_prompt(@fashion_answer))
+
+      # image_prompt = "a guy in a shirt and suit looks fashion"
+      # save the image as a attachment on fashion_answer instance
+      #
+
+      #   @fashion_answer.generated_image.attach(
+      #     io: StringIO.new(@response.data),
+      #     filename: "generated_image.png",
+      #     content_type: "image/png"
+      #   )
+      # end
+
+      filename = "generated_image.png"
+
+      # Use StringIO to provide an IO object to Active Storage
+      image_io = StringIO.new(@generated_image.to_blob)
+
+      @fashion_answer.generated_image.attach(
+        io: image_io,
+        filename: filename,
+        content_type:  'image/png'
+      )
+
+      redirect_to @fashion_answer, notice: "Your fashion answer was created."
     else
       render :new, status: :unprocessable_entity
     end
-
   end
+
 
   def show
     @fashion_answer = current_user.fashion_answers.find(params[:id])
@@ -49,6 +81,20 @@ class FashionAnswersController < ApplicationController
   rescue => e
     Rails.logger.error "SerpAPI Error: #{e.message}"
     []
+  end
+
+  def image_prompt(answer)
+    <<~PROMPT
+      Based on the following fashion preferences, provide personalized style advice and generate a image
+        Gender: #{answer.gender}
+        Lifestyle: #{answer.lifestyle}
+        Favorite Colors: #{answer.colors}
+        Main Occasion: #{answer.occasion}
+        Comfort Preference: #{answer.comfort}
+        Style Statement: #{answer.statement}
+        Personality Type: #{answer.personality_type}
+        User Image: #{Base64.strict_encode64(@fashion_answer.user_image.download)}
+    PROMPT
   end
 
   def generate_advice(answer)
@@ -99,6 +145,8 @@ class FashionAnswersController < ApplicationController
       answer.colour_palette = text[/COLOURS:\s*(.+?)(?=BRANDS:|$)/m, 1]&.strip
       answer.recommended_brands = text[/BRANDS:\s*(.+?)(?=SHOPS:|$)/m, 1]&.strip
       answer.where_to_shop = text[/SHOPS:\s*(.+?)$/m, 1]&.strip
+
+      # return true
       answer.save
       Rails.logger.info "AI request success fashion_answer_id=#{answer.id}"
       true
