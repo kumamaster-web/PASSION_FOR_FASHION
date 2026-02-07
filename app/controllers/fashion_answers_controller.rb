@@ -9,8 +9,11 @@ class FashionAnswersController < ApplicationController
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
     if @fashion_answer.save
-      # generate_advice(@fashion_answer)
+      advice_ok = generate_advice(@fashion_answer)
       redirect_to @fashion_answer, notice: "Your fashion answer was created."
+      unless advice_ok
+        flash[:alert] = "AI recommendations are temporarily unavailable. Please try again in a few minutes."
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -82,6 +85,7 @@ class FashionAnswersController < ApplicationController
     base_delay = 2 # seconds
 
     begin
+      Rails.logger.info "AI request start fashion_answer_id=#{answer.id} model=gemini-2.0-flash"
       chat = RubyLLM.chat(model: "gemini-2.0-flash")
       response = chat.ask(prompt)
 
@@ -93,15 +97,20 @@ class FashionAnswersController < ApplicationController
       answer.recommended_brands = text[/BRANDS:\s*(.+?)(?=SHOPS:|$)/m, 1]&.strip
       answer.where_to_shop = text[/SHOPS:\s*(.+?)$/m, 1]&.strip
       answer.save
+      Rails.logger.info "AI request success fashion_answer_id=#{answer.id}"
+      true
     rescue => e
-      if (e.message.include?('429') || e.message.downcase.include?('rate') || e.message.downcase.include?('exhausted')) && retry_count < max_retries
+      rate_limited = e.message.include?("429") || e.message.downcase.include?("rate") || e.message.downcase.include?("exhausted")
+
+      if rate_limited && retry_count < max_retries
         retry_count += 1
         delay = base_delay * (2 ** (retry_count - 1)) # Exponential backoff: 2s, 4s, 8s
         Rails.logger.warn "AI rate limited, retrying in #{delay}s (attempt #{retry_count}/#{max_retries})"
         sleep(delay)
         retry
       else
-        Rails.logger.error "AI Error: #{e.message}"
+        Rails.logger.error "AI Error: #{e.class}: #{e.message} fashion_answer_id=#{answer.id} retries=#{retry_count} rate_limited=#{rate_limited}"
+        false
       end
     end
   end
