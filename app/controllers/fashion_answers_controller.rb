@@ -25,6 +25,7 @@ class FashionAnswersController < ApplicationController
   def show
     @fashion_answer = current_user.fashion_answers.find(params[:id])
     @products = fetch_product_recommendations(@fashion_answer)
+    @existing_chat = current_user.chats.find_by(fashion_answer: @fashion_answer)
   end
 
   def index
@@ -43,7 +44,7 @@ class FashionAnswersController < ApplicationController
     # Use Rails cache to avoid repeated API calls
     cache_key = "products_#{answer.id}_#{answer.updated_at.to_i}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-
+      SerpapiClient.products_for_fashion_answer(answer)
     end
   rescue => e
     Rails.logger.error "SerpAPI Error: #{e.message}"
