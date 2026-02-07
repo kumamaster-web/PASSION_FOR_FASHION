@@ -7,12 +7,14 @@
     <div class="quiz-section">
       <h3>Upload Your Photo (Optional)</h3>
 
-      <label class="upload-box">
-        <%= f.file_field :user_image, class: "file-input", accept: "image/*" %>
+      <label class="upload-box" data-controller="upload" data-upload-target="box"
+             data-action="dragover->upload#dragover dragleave->upload#dragleave drop->upload#drop">
+        <%= f.file_field :user_image, class: "file-input", accept: "image/*",
+            data: { upload_target: "input", action: "change->upload#changed" } %>
 
-        <img class="upload-preview" hidden />
+        <img class="upload-preview" hidden data-upload-target="preview" />
 
-        <div class="upload-content">
+        <div class="upload-content" data-upload-target="content">
           <svg width="32" height="32" viewBox="0 0 24 24">
             <path d="M12 16V8M8 12l4-4 4 4"
             stroke="currentColor"

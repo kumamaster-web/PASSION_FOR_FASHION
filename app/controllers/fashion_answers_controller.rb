@@ -10,9 +10,11 @@ class FashionAnswersController < ApplicationController
 
     if @fashion_answer.save
       advice_ok = generate_advice(@fashion_answer)
-      redirect_to @fashion_answer, notice: "Your fashion answer was created."
-      unless advice_ok
+      if advice_ok
+        redirect_to @fashion_answer, notice: "Your fashion answer was created.", status: :see_other
+      else
         flash[:alert] = "AI recommendations are temporarily unavailable. Please try again in a few minutes."
+        redirect_to @fashion_answer, status: :see_other
       end
     else
       render :new, status: :unprocessable_entity
