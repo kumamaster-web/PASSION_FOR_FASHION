@@ -14,7 +14,7 @@
     <div class="card-body justify-content-center">
       <div >
         <% if @fashion_answer.user_image.present? %>
-          <%= cl_image_tag @fashion_answer.user_image.key, alt: "Uploaded photo", class: "uploaded-photo user-image" %>
+          <%= cl_image_tag @fashion_answer.user_image.key, width: 600, height: 400, crop: :fill, gravity: :auto, alt: "Uploaded photo", class: "uploaded-photo user-image" %>
         <% else %>
         <p>No photo uploaded</p>
         <% end %>
@@ -59,7 +59,17 @@
     <div class="card mb-3">
       <div class="card-header">Colour Palette</div>
       <div class="card-body">
-        <p><%= @fashion_answer.colour_palette %></p>
+        <div class="colour-swatches">
+          <% @fashion_answer.colour_palette.split(',').each do |colour_name| %>
+            <% hex = color_name_to_hex(colour_name) %>
+            <div class="colour-swatch-item">
+              <% if hex %>
+                <span class="colour-sphere" style="background: <%= hex %>;"></span>
+              <% end %>
+              <span class="colour-label"><%= colour_name.strip %></span>
+            </div>
+          <% end %>
+        </div>
       </div>
     </div>
 
@@ -81,7 +91,7 @@
     <div class="card mb-3">
       <div class="card-body">
         <h4 class="mb-2">💬 Ask your AI Stylist</h4>
-        <p class="text-muted mb-3">
+        <p class="mb-3" style="color: rgba(255, 255, 255, 0.85);">
           Chat with an AI stylist using <strong>this exact quiz result</strong> (colors, lifestyle, budget, brands).
         </p>
 
