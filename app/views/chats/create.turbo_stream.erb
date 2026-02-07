@@ -1,0 +1,5 @@
+<%= turbo_stream.replace "inline-chat-container" do %>
+  <div id="inline-chat-container" data-controller="inline-chat">
+    <%= render partial: "chats/inline_chat", locals: { chat: @chat } %>
+  </div>
+<% end %>

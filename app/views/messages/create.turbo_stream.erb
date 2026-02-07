@@ -3,3 +3,11 @@
 <% last_two.each do |msg| %>
   <%= turbo_stream.append "messages", partial: "messages/message", locals: { message: msg } %>
 <% end %>
+
+<%# Clear the message input after sending %>
+<%= turbo_stream.replace "message-form" do %>
+  <%= form_with model: [@chat, Message.new], id: "message-form", data: { turbo: true }, class: "d-flex gap-2" do |f| %>
+    <%= f.text_field :content, class: "form-control form-control-sm", placeholder: "Ask your stylist...", autocomplete: "off" %>
+    <%= f.submit "Send", class: "btn btn-primary btn-sm" %>
+  <% end %>
+<% end %>

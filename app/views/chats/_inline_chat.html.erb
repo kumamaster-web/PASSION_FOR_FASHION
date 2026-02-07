@@ -1,0 +1,17 @@
+<div class="inline-chat-panel" data-inline-chat-target="panel">
+  <div class="inline-chat-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">💬 AI Stylist Chat</h5>
+    <button type="button" class="btn btn-sm btn-outline-light" data-action="inline-chat#toggle">✕</button>
+  </div>
+
+  <div id="messages" class="inline-chat-messages" data-inline-chat-target="messages">
+    <%= render chat.messages.order(:created_at) %>
+  </div>
+
+  <div class="inline-chat-input">
+    <%= form_with model: [chat, Message.new], id: "message-form", data: { turbo: true }, class: "d-flex gap-2" do |f| %>
+      <%= f.text_field :content, class: "form-control form-control-sm", placeholder: "Ask your stylist...", autocomplete: "off" %>
+      <%= f.submit "Send", class: "btn btn-primary btn-sm" %>
+    <% end %>
+  </div>
+</div>

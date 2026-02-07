@@ -8,7 +8,7 @@
     <%= render @chat.messages.order(:created_at) %>
   </div>
 
-  <%= form_with model: [@chat, Message.new], data: { turbo: true }, class: "d-flex gap-2" do |f| %>
+  <%= form_with model: [@chat, Message.new], id: "message-form", data: { turbo: true }, class: "d-flex gap-2" do |f| %>
     <%= f.text_field :content, class: "form-control", placeholder: "Ask your stylist..." %>
     <%= f.submit "Send", class: "btn btn-primary" %>
   <% end %>
