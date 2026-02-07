@@ -9,7 +9,8 @@ class FashionAnswersController < ApplicationController
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
     if @fashion_answer.save
-      # generate_advice(@fashion_answer)
+      generate_advice(@fashion_answer)
+      ensure_chat(@fashion_answer)
       redirect_to @fashion_answer, notice: "Your fashion answer was created."
     else
       render :new, status: :unprocessable_entity
@@ -104,5 +105,18 @@ class FashionAnswersController < ApplicationController
         Rails.logger.error "AI Error: #{e.message}"
       end
     end
+  end
+
+  def ensure_chat(answer)
+    chat = current_user.chats.find_or_create_by!(fashion_answer: answer) do |c|
+      c.title = "AI Stylist – #{answer.created_at.strftime('%Y-%m-%d')}"
+    end
+
+    return if chat.messages.exists?
+
+    chat.messages.create!(
+      role: "assistant",
+      content: "Hi! I’m your AI stylist for this quiz result. Ask me for outfits, colors, brands, or how to style for a specific occasion 😊"
+    )
   end
 end
