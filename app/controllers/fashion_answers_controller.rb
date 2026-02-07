@@ -9,8 +9,11 @@ class FashionAnswersController < ApplicationController
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
     if @fashion_answer.save
-      generate_advice(@fashion_answer)
+      advice_ok = generate_advice(@fashion_answer)
       redirect_to @fashion_answer, notice: "Your fashion answer was created."
+      unless advice_ok
+        flash[:alert] = "AI recommendations are temporarily unavailable. Please try again in a few minutes."
+      end
     else
       render :new, status: :unprocessable_entity
     end
@@ -38,7 +41,7 @@ class FashionAnswersController < ApplicationController
     # Use Rails cache to avoid repeated API calls
     cache_key = "products_#{answer.id}_#{answer.updated_at.to_i}"
     Rails.cache.fetch(cache_key, expires_in: 1.hour) do
-      SerpapiClient.products_for_fashion_answer(answer)
+
     end
   rescue => e
     Rails.logger.error "SerpAPI Error: #{e.message}"
@@ -77,8 +80,13 @@ class FashionAnswersController < ApplicationController
       SHOPS: [comma separated shops]
     PROMPT
 
+    max_retries = 5
+    retry_count = 0
+    base_delay = 3 # seconds
+
     begin
-      chat = RubyLLM.chat(model: "gemini-2.0-flash-lite")
+      Rails.logger.info "AI request start fashion_answer_id=#{answer.id} model=gemini-2.0-flash attempt=#{retry_count + 1}"
+      chat = RubyLLM.chat(model: "gemini-2.0-flash")
       response = chat.ask(prompt)
 
       # Parse the response
@@ -89,8 +97,19 @@ class FashionAnswersController < ApplicationController
       answer.recommended_brands = text[/BRANDS:\s*(.+?)(?=SHOPS:|$)/m, 1]&.strip
       answer.where_to_shop = text[/SHOPS:\s*(.+?)$/m, 1]&.strip
       answer.save
+      Rails.logger.info "AI request success fashion_answer_id=#{answer.id}"
+      true
     rescue => e
-      Rails.logger.error "AI Error: #{e.message}"
+      retry_count += 1
+      if retry_count <= max_retries
+        delay = base_delay * (2 ** (retry_count - 1)) + rand(0..2) # 3s, 6s, 12s, 24s, 48s + jitter
+        Rails.logger.warn "AI error (#{e.class}: #{e.message}), retrying in #{delay}s (attempt #{retry_count}/#{max_retries}) fashion_answer_id=#{answer.id}"
+        sleep(delay)
+        retry
+      else
+        Rails.logger.error "AI giving up: #{e.class}: #{e.message} fashion_answer_id=#{answer.id} after #{retry_count} attempts"
+        false
+      end
     end
   end
 end
