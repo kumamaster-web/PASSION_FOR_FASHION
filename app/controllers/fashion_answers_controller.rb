@@ -9,7 +9,7 @@ class FashionAnswersController < ApplicationController
     @fashion_answer = current_user.fashion_answers.new(fashion_answer_params)
 
     if @fashion_answer.save
-      # generate_advice(@fashion_answer)
+      generate_advice(@fashion_answer)
       redirect_to @fashion_answer, notice: "Your fashion answer was created."
     else
       render :new, status: :unprocessable_entity
